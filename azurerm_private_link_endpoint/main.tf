@@ -37,7 +37,7 @@ resource "azurerm_sql_server" "sql_server" {
 }
 
 resource "azurerm_private_link_endpoint" "endpoint" {
-  name     = "${var.prefix}-endpoint"
+  name                         = "${var.prefix}-endpoint"
   resource_group_name          = azurerm_resource_group.repro.name
   location                     = azurerm_resource_group.repro.location
   subnet_id                    = azurerm_subnet.subnet.id
@@ -47,6 +47,8 @@ resource "azurerm_private_link_endpoint" "endpoint" {
     name                       = "${var.prefix}-endpoint-connection"
     private_connection_resource_id = azurerm_sql_server.sql_server.id
     # BUG: Error: private_service_connection.0.subresource_names.0 must only contain upper or lowercase letters, numbers, underscores, and periods
+    # The regex in ValidatePrivateLinkSubResourceName is single character only (`^[\w\.]$`)
+    # https://github.com/terraform-providers/terraform-provider-azurerm/blob/daec2899444c0caa6d863a0e7e0d7710e76d5686/azurerm/internal/services/network/validate.go
     subresource_names          = ["sqlServer"]
   }
 }
