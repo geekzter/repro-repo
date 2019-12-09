@@ -103,7 +103,8 @@ Network rule created for CIDR expression
 
 <!--- Please list the steps required to reproduce the issue. --->
 
-1. `terraform plan`
+1. `terraform init`
+2. `terraform plan`
 
 ### Important Factoids
 

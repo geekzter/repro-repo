@@ -133,7 +133,8 @@ Private Endpoint created for given sqlServer sub resource (GroupId)
 
 <!--- Please list the steps required to reproduce the issue. --->
 
-1. `terraform apply`
+1. `terraform init`
+2. `terraform apply`
 
 ### Important Factoids
 
