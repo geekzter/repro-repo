@@ -1,16 +1,16 @@
-resource "azurerm_resource_group" "repro" {
+resource azurerm_resource_group repro {
   name                         = "${var.prefix}-private-endpoint-issue"
   location                     = var.location
 }
 
-resource "azurerm_virtual_network" "network" {
+resource azurerm_virtual_network network {
   name                         = "${var.prefix}-vnet"
   address_space                = ["10.0.0.0/16"]
   location                     = azurerm_resource_group.repro.location
   resource_group_name          = azurerm_resource_group.repro.name
 }
 
-resource "azurerm_subnet" "subnet" {
+resource azurerm_subnet subnet {
   name                         = "${var.prefix}-subnet"
   resource_group_name          = azurerm_resource_group.repro.name
   virtual_network_name         = azurerm_virtual_network.network.name
@@ -18,7 +18,7 @@ resource "azurerm_subnet" "subnet" {
   enforce_private_link_endpoint_network_policies = false
 }
 
-resource "random_string" "password" {
+resource random_string password {
   length                       = 12
   upper                        = true
   lower                        = true
@@ -27,7 +27,7 @@ resource "random_string" "password" {
   override_special             = "." 
 }
 
-resource "azurerm_sql_server" "sql_server" {
+resource azurerm_sql_server sql_server {
   name                         = "${var.prefix}sqlserver"
   resource_group_name          = azurerm_resource_group.repro.name
   location                     = azurerm_resource_group.repro.location
@@ -36,7 +36,7 @@ resource "azurerm_sql_server" "sql_server" {
   administrator_login_password = random_string.password.result
 }
 
-resource "azurerm_private_link_endpoint" "endpoint" {
+resource azurerm_private_link_endpoint endpoint {
   name                         = "${var.prefix}-endpoint"
   resource_group_name          = azurerm_resource_group.repro.name
   location                     = azurerm_resource_group.repro.location
