@@ -1,5 +1,5 @@
 locals {
-  resource_group_name          = "pipeline-storage-issue-${lower(random_string.suffix.result)}"
+  resource_group_name          = "pipeline-storage-${lower(random_string.suffix.result)}"
   resource_group_name_short    = substr(lower(replace(local.resource_group_name,"-","")),0,20)
 
   tags                         = {
