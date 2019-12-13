@@ -1,1 +1,3 @@
-variable location {}
+variable location {
+    default = "eastus"
+}
