@@ -1,26 +1,26 @@
-resource null_resource nested_pwsh_1a {
-  provisioner "local-exec" {
-    command                    = "Get-Command 'Get-AzResource'"
-    interpreter                = ["pwsh", "-nop", "-Command"]
-  }
+# resource null_resource nested_pwsh_1a {
+#   provisioner "local-exec" {
+#     command                    = "Get-Command 'Get-AzResource'"
+#     interpreter                = ["pwsh", "-nop", "-Command"]
+#   }
 
-  provisioner "local-exec" {
-    command                    = "Get-Command 'New-AzPrivateDnsRecordConfig'"
-    interpreter                = ["pwsh", "-nop", "-Command"]
-  }
-}
+#   provisioner "local-exec" {
+#     command                    = "Get-Command 'New-AzPrivateDnsRecordConfig'"
+#     interpreter                = ["pwsh", "-nop", "-Command"]
+#   }
+# }
 
-resource null_resource nested_pwsh_1b {
-  provisioner "local-exec" {
-    command                    = "Get-Command 'Get-AzResource'"
-    interpreter                = ["pwsh", "-nop", "-Command"]
-  }
+# resource null_resource nested_pwsh_1b {
+#   provisioner "local-exec" {
+#     command                    = "Get-Command 'Get-AzResource'"
+#     interpreter                = ["pwsh", "-nop", "-Command"]
+#   }
 
-  provisioner "local-exec" {
-    command                    = "Get-Command 'New-AzPrivateDnsRecordConfig'"
-    interpreter                = ["pwsh", "-nop", "-Command"]
-  }
-}
+#   provisioner "local-exec" {
+#     command                    = "Get-Command 'New-AzPrivateDnsRecordConfig'"
+#     interpreter                = ["pwsh", "-nop", "-Command"]
+#   }
+# }
 
 resource null_resource nested_pwsh_2 {
   # Doesn't work
