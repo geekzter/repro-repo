@@ -12,6 +12,10 @@ function AzLogin () {
 }
 
 AzLogin
-Import-Module Az.PrivateDns
+if (!(Get-Module Az.PrivateDns)) {
+    Write-Host "PowerShell module Az.PrivateDns not imported, importing now.."
+    Import-Module Az.PrivateDns
+    Get-Module Az.PrivateDns
+}
 Get-Command Get-AzResource
 Get-Command New-AzPrivateDnsRecordConfig
