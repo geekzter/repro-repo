@@ -17,6 +17,7 @@ function AzLogin () {
 #     Import-Module Az.PrivateDns
 #     Get-Module Az.PrivateDns
 # }
+Get-Module Az.Accounts
 Get-Module Az.Accounts -ListAvailable
 Get-Command Get-AzResource
 Get-Command New-AzPrivateDnsRecordConfig
