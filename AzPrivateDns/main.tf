@@ -1,14 +1,24 @@
 resource null_resource nested_pwsh {
-  provisioner "local-exec" {
+  # Doesn't work
+  provisioner local-exec {
     command                    = "script.ps1"
     interpreter                = ["pwsh", "-nop", "-File"]
   }
-  provisioner "local-exec" {
-    command                    = "./script.ps1"
-    interpreter                = ["pwsh", "-nop", "-Command"]
+
+  # Doesn't work
+  provisioner local-exec {
+    command                    = ". ./script.ps1"
+    interpreter                = ["pwsh", 
+                                  "-NoLogo", 
+                                  "-NoProfile", 
+                                  "-NonInteractive", 
+                                  "-ExecutionPolicy","Unrestricted", 
+                                  "-Command"]
   }
-  provisioner "local-exec" {
-    command                    = "Get-Command 'New-AzPrivateDnsRecordConfig'"
+
+  # Works
+  provisioner local-exec {
+    command                    = "Get-Command Get-AzResource,New-AzPrivateDnsRecordConfig"
     interpreter                = ["pwsh", "-nop", "-Command"]
   }
 }

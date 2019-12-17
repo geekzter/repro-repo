@@ -1,2 +1,1 @@
-Get-Command 'Get-AzResource'
-Get-Command 'New-AzPrivateDnsRecordConfig'
+Get-Command Get-AzResource,New-AzPrivateDnsRecordConfig
