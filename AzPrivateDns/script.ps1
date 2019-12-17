@@ -11,11 +11,12 @@ function AzLogin () {
     $null = Set-AzContext -Subscription $env:ARM_SUBSCRIPTION_ID -Tenant $env:ARM_TENANT_ID
 }
 
-AzLogin
-if (!(Get-Module Az.PrivateDns)) {
-    Write-Host "PowerShell module Az.PrivateDns not imported, importing now.."
-    Import-Module Az.PrivateDns
-    Get-Module Az.PrivateDns
-}
+#AzLogin
+# if (!(Get-Module Az.PrivateDns)) {
+#     Write-Host "PowerShell module Az.PrivateDns not imported, importing now.."
+#     Import-Module Az.PrivateDns
+#     Get-Module Az.PrivateDns
+# }
+Get-Module Az.Accounts -ListAvailable
 Get-Command Get-AzResource
 Get-Command New-AzPrivateDnsRecordConfig
