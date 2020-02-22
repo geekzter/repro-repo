@@ -60,7 +60,7 @@ resource "azurerm_subnet" "subnet" {
   resource_group_name          = azurerm_resource_group.repro.name
   virtual_network_name         = azurerm_virtual_network.network.name
   address_prefix               = "10.0.1.0/24"
-  enforce_private_link_endpoint_network_policies = false
+  enforce_private_link_endpoint_network_policies = true
 }
 
 resource "random_string" "password" {
