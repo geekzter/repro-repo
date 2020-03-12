@@ -24,7 +24,6 @@ resource random_string password {
   lower                        = true
   number                       = true
   special                      = true
-  override_special             = "." 
 }
 
 resource azurerm_sql_server sql_server {
@@ -60,8 +59,8 @@ resource azurerm_private_dns_a_record sql_server_dns_record {
   zone_name                    = azurerm_private_dns_zone.sql_server_db_dns_zone.name
   resource_group_name          = azurerm_resource_group.repro.name
   ttl                          = 300
-  # Proposed Attribute for resource azurerm_private_endpoint: private_ip_address
-  records                      = [azurerm_private_endpoint.endpoint.private_ip_address]
+  # Fixed
+  records                      = [azurerm_private_endpoint.endpoint.private_service_connection[0].private_ip_address]
 }
 
 resource azurerm_private_dns_zone_virtual_network_link link {
