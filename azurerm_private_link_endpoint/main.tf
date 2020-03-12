@@ -55,14 +55,14 @@ resource azurerm_private_dns_zone sql_server_db_dns_zone {
   resource_group_name          = azurerm_resource_group.repro.name
 }
 
-# resource azurerm_private_dns_a_record sql_server_dns_record {
-#   name                         = azurerm_sql_server.sql_server.name
-#   zone_name                    = azurerm_private_dns_zone.sql_server_db_dns_zone.name
-#   resource_group_name          = azurerm_resource_group.repro.name
-#   ttl                          = 300
-#   # Proposed Attribute for resource azurerm_private_endpoint: private_ip_address
-#   records                      = [azurerm_private_endpoint.endpoint.private_ip_address]
-# }
+resource azurerm_private_dns_a_record sql_server_dns_record {
+  name                         = azurerm_sql_server.sql_server.name
+  zone_name                    = azurerm_private_dns_zone.sql_server_db_dns_zone.name
+  resource_group_name          = azurerm_resource_group.repro.name
+  ttl                          = 300
+  # Proposed Attribute for resource azurerm_private_endpoint: private_ip_address
+  records                      = [azurerm_private_endpoint.endpoint.private_ip_address]
+}
 
 resource azurerm_private_dns_zone_virtual_network_link link {
   name                         = "${azurerm_virtual_network.network.name}-dns"
