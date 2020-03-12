@@ -167,9 +167,9 @@ All resources destroyed
 
 <!--- What actually happened? --->
 The `azurerm_network_watcher_flow_log` resource is not destroyed:
-```
+`
 Error: Error deleting Network Security Group "repro-flowlog-issue-nsg" (Resource Group "repro-flowlog-issue"): network.SecurityGroupsClient#Delete: Failure sending request: StatusCode=400 -- Original Error: Code="InvalidResourceReference" Message="Resource /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/NetworkWatcherRG/providers/Microsoft.Network/networkWatchers/NetworkWatcher_westeurope/FlowLogs/Microsoft.Networkrepro-flowlog-issuerepro-flowlog-issue-nsg referenced by resource /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/repro-flowlog-issue/providers/Microsoft.Network/networkSecurityGroups/repro-flowlog-issue-nsg was not found. Please make sure that the referenced resource exists, and that both resources are in the same region." Details=[]
-```
+`
 
 ### Steps to Reproduce
 
