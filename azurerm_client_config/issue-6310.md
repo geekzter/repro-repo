@@ -99,6 +99,25 @@ client_tenant_id = 00000000-0000-0000-0000-000000000000
 <!--- Are there anything atypical about your accounts that we should know? For example: Running in a Azure China/Germany/Government? --->
 This only happens when run from Azure Cloud Shell ([shell.azure.com](https://shell.azure.com))
 
+```
+az account show
+{
+  "environmentName": "AzureCloud",
+  "homeTenantId": "00000000-0000-0000-0000-000000000000",
+  "id": "00000000-0000-0000-0000-000000000000",
+  "isDefault": true,
+  "managedByTenants": [],
+  "name": "Subscription Name",
+  "state": "Enabled",
+  "tenantId": "00000000-0000-0000-0000-000000000000",
+  "user": {
+    "cloudShellID": true,
+    "name": "me@domain.com",
+    "type": "user"
+  }
+}
+```
+
 ### References
 
 <!---
