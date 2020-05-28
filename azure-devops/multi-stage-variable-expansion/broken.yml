@@ -1,7 +1,7 @@
 name: multi-stage-variable-expansion-broken
 
 variables:
-- name: 'subscriptionConnection2'
+- name: 'subscriptionConnection3'
   value: 'internal-azure-subscription'
 
 
@@ -17,8 +17,8 @@ stages:
     value: 'internal-azure-subscription'
 
   jobs:
-  - job: 'Prepare'
-    displayName: 'Prepare'
+  - job: 'Repro'
+    displayName: 'Repro'
     condition: succeeded()
     timeoutInMinutes: $[ variables['jobTimeOutMinutes'] ]
 
@@ -29,42 +29,45 @@ stages:
       clean: all
 
     steps:
-    #   - task: AzureCLI@2
-    #     displayName: 'Access service connection through stage level variable group'
-    #     enabled: true
-    #     name: useConnectionA
-    #     inputs:
-    #       azureSubscription: '$(subscriptionConnection)'
-    #       scriptType: pscore
-    #       scriptLocation: inlineScript
-    #       inlineScript: |
-    #         az account show
-    #       addSpnToEnvironment: true
-    #       useGlobalConfig: true
-    #       failOnStandardError: true
+      # # Broken
+      # - task: AzureCLI@2
+      #   displayName: 'Access service connection through stage level variable group'
+      #   enabled: true
+      #   name: useConnectionA
+      #   inputs:
+      #     azureSubscription: '$(subscriptionConnection)'
+      #     scriptType: pscore
+      #     scriptLocation: inlineScript
+      #     inlineScript: |
+      #       az account show
+      #     addSpnToEnvironment: true
+      #     useGlobalConfig: true
+      #     failOnStandardError: true
 
-    #   - task: AzureCLI@2
-    #     displayName: 'Access service connection through stage level variable'
-    #     enabled: true
-    #     name: useConnectionB
-    #     condition: succeededOrFailed()
-    #     inputs:
-    #       azureSubscription: '$(subscriptionConnection1)'
-    #       scriptType: pscore
-    #       scriptLocation: inlineScript
-    #       inlineScript: |
-    #         az account show
-    #       addSpnToEnvironment: true
-    #       useGlobalConfig: true
-    #       failOnStandardError: true
+      # Broken
+      - task: AzureCLI@2
+        displayName: 'Access service connection through stage level variable'
+        enabled: true
+        name: useConnectionB
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: '$(subscriptionConnection2)'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            az account show
+          addSpnToEnvironment: true
+          useGlobalConfig: true
+          failOnStandardError: true
     
+      # Works!
       - task: AzureCLI@2
         displayName: 'Access service connection through pipeline level variable'
         enabled: true
         name: useConnectionC
         condition: succeededOrFailed()
         inputs:
-          azureSubscription: '$(subscriptionConnection2)'
+          azureSubscription: '$(subscriptionConnection3)'
           scriptType: pscore
           scriptLocation: inlineScript
           inlineScript: |
