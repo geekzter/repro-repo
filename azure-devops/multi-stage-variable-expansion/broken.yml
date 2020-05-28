@@ -27,7 +27,7 @@ stages:
       - task: AzureCLI@2
         displayName: 'Access service connection through stage level variable group'
         enabled: true
-        name: terraformConfig
+        name: useConnectionA
         inputs:
           azureSubscription: '$(subscriptionConnection)'
           scriptType: pscore
@@ -41,7 +41,7 @@ stages:
       - task: AzureCLI@2
         displayName: 'Access service connection through stage level variable'
         enabled: true
-        name: terraformConfig
+        name: useConnectionA
         condition: succeededOrFailed()
         inputs:
           azureSubscription: '$(subscriptionConnection1)'
