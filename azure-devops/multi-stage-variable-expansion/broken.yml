@@ -1,3 +1,5 @@
+name: multi-stage-variable-expansion-broken
+
 stages:
 - stage: Stage
   displayName: Stage
@@ -5,9 +7,9 @@ stages:
   # Global variables shared by all jobs
   variables:
   - group: 'vdc'
-    # 'vdc-ci' contains build (non-release) settings
   - group: 'vdc-ci'
-    # 'vdc-vanity-domain' contains certificate, domain information
+  - name: 'subscriptionConnection1'
+    value: 'internal-azure-subscription'
 
   jobs:
   - job: 'Prepare'
@@ -35,4 +37,19 @@ stages:
           addSpnToEnvironment: true
           useGlobalConfig: true
           failOnStandardError: true
-  
+
+      - task: AzureCLI@2
+        displayName: 'Access service connection through stage level variable'
+        enabled: true
+        name: terraformConfig
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: '$(subscriptionConnection1)'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            az account show
+          addSpnToEnvironment: true
+          useGlobalConfig: true
+          failOnStandardError: true
+    
