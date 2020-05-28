@@ -24,19 +24,19 @@ stages:
       clean: all
 
     steps:
-      - task: AzureCLI@2
-        displayName: 'Access service connection through stage level variable group'
-        enabled: true
-        name: useConnectionA
-        inputs:
-          azureSubscription: '$(subscriptionConnection)'
-          scriptType: pscore
-          scriptLocation: inlineScript
-          inlineScript: |
-            az account show
-          addSpnToEnvironment: true
-          useGlobalConfig: true
-          failOnStandardError: true
+    #   - task: AzureCLI@2
+    #     displayName: 'Access service connection through stage level variable group'
+    #     enabled: true
+    #     name: useConnectionA
+    #     inputs:
+    #       azureSubscription: '$(subscriptionConnection)'
+    #       scriptType: pscore
+    #       scriptLocation: inlineScript
+    #       inlineScript: |
+    #         az account show
+    #       addSpnToEnvironment: true
+    #       useGlobalConfig: true
+    #       failOnStandardError: true
 
       - task: AzureCLI@2
         displayName: 'Access service connection through stage level variable'
