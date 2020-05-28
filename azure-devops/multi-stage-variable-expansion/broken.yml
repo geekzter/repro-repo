@@ -1,0 +1,38 @@
+stages:
+- stage: Stage
+  displayName: Stage
+
+  # Global variables shared by all jobs
+  variables:
+  - group: 'vdc'
+    # 'vdc-ci' contains build (non-release) settings
+  - group: 'vdc-ci'
+    # 'vdc-vanity-domain' contains certificate, domain information
+
+  jobs:
+  - job: 'Prepare'
+    displayName: 'Prepare'
+    condition: succeeded()
+    timeoutInMinutes: $[ variables['jobTimeOutMinutes'] ]
+
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    workspace:
+      clean: all
+
+    steps:
+      - task: AzureCLI@2
+        displayName: 'Access service connection through stage level variable group'
+        enabled: true
+        name: terraformConfig
+        inputs:
+          azureSubscription: '$(subscriptionConnection)'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            az account show
+          addSpnToEnvironment: true
+          useGlobalConfig: true
+          failOnStandardError: true
+  
