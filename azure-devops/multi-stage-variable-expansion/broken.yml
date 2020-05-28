@@ -29,29 +29,13 @@ stages:
       clean: all
 
     steps:
-      # # Broken
-      # - task: AzureCLI@2
-      #   displayName: 'Access service connection through stage level variable group'
-      #   enabled: true
-      #   name: useConnectionA
-      #   inputs:
-      #     azureSubscription: '$(subscriptionConnection)'
-      #     scriptType: pscore
-      #     scriptLocation: inlineScript
-      #     inlineScript: |
-      #       az account show
-      #     addSpnToEnvironment: true
-      #     useGlobalConfig: true
-      #     failOnStandardError: true
-
       # Broken
       - task: AzureCLI@2
-        displayName: 'Access service connection through stage level variable'
+        displayName: 'Access service connection through stage level variable group'
         enabled: true
-        name: useConnectionB
-        condition: succeededOrFailed()
+        name: useConnectionA
         inputs:
-          azureSubscription: '$(subscriptionConnection2)'
+          azureSubscription: '$(subscriptionConnection)'
           scriptType: pscore
           scriptLocation: inlineScript
           inlineScript: |
@@ -59,6 +43,23 @@ stages:
           addSpnToEnvironment: true
           useGlobalConfig: true
           failOnStandardError: true
+
+      # Broken
+      # There was a resource authorization issue: "The pipeline is not valid. Job Repro: Step useConnectionB input connectedServiceNameARM references service connection $(subscriptionConnection2) which could not be found. The service connection does not exist or has not been authorized for use. For authorization details, refer to https://aka.ms/yamlauthz."
+    #   - task: AzureCLI@2
+    #     displayName: 'Access service connection through stage level variable'
+    #     enabled: true
+    #     name: useConnectionB
+    #     condition: succeededOrFailed()
+    #     inputs:
+    #       azureSubscription: '$(subscriptionConnection2)'
+    #       scriptType: pscore
+    #       scriptLocation: inlineScript
+    #       inlineScript: |
+    #         az account show
+    #       addSpnToEnvironment: true
+    #       useGlobalConfig: true
+    #       failOnStandardError: true
     
       # Works!
       - task: AzureCLI@2
