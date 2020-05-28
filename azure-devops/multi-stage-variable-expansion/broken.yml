@@ -1,5 +1,10 @@
 name: multi-stage-variable-expansion-broken
 
+variables:
+- name: 'subscriptionConnection2'
+  value: 'internal-azure-subscription'
+
+
 stages:
 - stage: Stage
   displayName: Stage
@@ -8,7 +13,7 @@ stages:
   variables:
   - group: 'vdc'
   - group: 'vdc-ci'
-  - name: 'subscriptionConnection1'
+  - name: 'subscriptionConnection2'
     value: 'internal-azure-subscription'
 
   jobs:
@@ -38,13 +43,28 @@ stages:
     #       useGlobalConfig: true
     #       failOnStandardError: true
 
+    #   - task: AzureCLI@2
+    #     displayName: 'Access service connection through stage level variable'
+    #     enabled: true
+    #     name: useConnectionB
+    #     condition: succeededOrFailed()
+    #     inputs:
+    #       azureSubscription: '$(subscriptionConnection1)'
+    #       scriptType: pscore
+    #       scriptLocation: inlineScript
+    #       inlineScript: |
+    #         az account show
+    #       addSpnToEnvironment: true
+    #       useGlobalConfig: true
+    #       failOnStandardError: true
+    
       - task: AzureCLI@2
-        displayName: 'Access service connection through stage level variable'
+        displayName: 'Access service connection through pipeline level variable'
         enabled: true
-        name: useConnectionB
+        name: useConnectionC
         condition: succeededOrFailed()
         inputs:
-          azureSubscription: '$(subscriptionConnection1)'
+          azureSubscription: '$(subscriptionConnection2)'
           scriptType: pscore
           scriptLocation: inlineScript
           inlineScript: |
@@ -52,4 +72,4 @@ stages:
           addSpnToEnvironment: true
           useGlobalConfig: true
           failOnStandardError: true
-    
+  
