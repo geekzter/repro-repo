@@ -1,0 +1,80 @@
+name: multi-stage-variable-expansion-broken
+
+variables:
+- name: 'subscriptionConnection3'
+  value: 'internal-azure-subscription'
+
+
+stages:
+- stage: Stage
+  displayName: Stage
+
+  # Global variables shared by all jobs
+  variables:
+  - group: 'vdc'
+  - group: 'vdc-ci'
+  - name: 'subscriptionConnection2'
+    value: 'internal-azure-subscription'
+
+  jobs:
+  - job: 'Repro'
+    displayName: 'Repro'
+    condition: succeeded()
+    timeoutInMinutes: $[ variables['jobTimeOutMinutes'] ]
+
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    workspace:
+      clean: all
+
+    steps:
+      # Broken
+      # There was a resource authorization issue: "The pipeline is not valid. Job Repro: Step useConnectionA input connectedServiceNameARM references service connection $(subscriptionConnection) which could not be found. The service connection does not exist or has not been authorized for use. For authorization details, refer to https://aka.ms/yamlauthz."
+      - task: AzureCLI@2
+        displayName: 'Access service connection through stage level variable group'
+        enabled: true
+        name: useConnectionA
+        inputs:
+          azureSubscription: '$(subscriptionConnection)'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            az account show
+          addSpnToEnvironment: true
+          useGlobalConfig: true
+          failOnStandardError: true
+
+      # Broken
+      # There was a resource authorization issue: "The pipeline is not valid. Job Repro: Step useConnectionB input connectedServiceNameARM references service connection $(subscriptionConnection2) which could not be found. The service connection does not exist or has not been authorized for use. For authorization details, refer to https://aka.ms/yamlauthz."
+      - task: AzureCLI@2
+        displayName: 'Access service connection through stage level variable'
+        enabled: true
+        name: useConnectionB
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: '$(subscriptionConnection2)'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            az account show
+          addSpnToEnvironment: true
+          useGlobalConfig: true
+          failOnStandardError: true
+    
+      # Works!
+      - task: AzureCLI@2
+        displayName: 'Access service connection through pipeline level variable'
+        enabled: true
+        name: useConnectionC
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: '$(subscriptionConnection3)'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            az account show
+          addSpnToEnvironment: true
+          useGlobalConfig: true
+          failOnStandardError: true
+  
