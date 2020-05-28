@@ -41,7 +41,7 @@ stages:
       - task: AzureCLI@2
         displayName: 'Access service connection through stage level variable'
         enabled: true
-        name: useConnectionA
+        name: useConnectionB
         condition: succeededOrFailed()
         inputs:
           azureSubscription: '$(subscriptionConnection1)'
