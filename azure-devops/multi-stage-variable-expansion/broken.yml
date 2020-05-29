@@ -68,13 +68,3 @@ stages:
           useGlobalConfig: true
           failOnStandardError: true
         condition: succeededOrFailed()
-        inputs:
-          azureSubscription: '$(subscriptionConnection3)'
-          scriptType: pscore
-          scriptLocation: inlineScript
-          inlineScript: |
-            az account show
-          addSpnToEnvironment: true
-          useGlobalConfig: true
-          failOnStandardError: true
-  
