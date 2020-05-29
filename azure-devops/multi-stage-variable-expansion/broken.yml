@@ -55,7 +55,7 @@ stages:
       - task: AzureCLI@2
         displayName: 'Access service connection through job level variable'
         enabled: true
-        name: useStageConnectionVariable
+        name: useJobConnectionVariable
         condition: succeededOrFailed()
         inputs:
           azureSubscription: '$(jobConnectionVariable)'
