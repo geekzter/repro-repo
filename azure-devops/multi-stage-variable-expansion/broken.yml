@@ -1,7 +1,7 @@
 name: multi-stage-variable-expansion-broken
 
 variables:
-- name: 'subscriptionConnection3'
+- name: 'pipelineConnectionVariable'
   value: 'internal-azure-subscription'
 
 
@@ -11,9 +11,7 @@ stages:
 
   # Global variables shared by all jobs
   variables:
-  - group: 'vdc'
-  - group: 'vdc-ci'
-  - name: 'subscriptionConnection2'
+  - name: 'stageConnectionVariable'
     value: 'internal-azure-subscription'
 
   jobs:
@@ -25,18 +23,43 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
 
-    workspace:
-      clean: all
-
+    variables:
+      - name: 'jobConnectionVariable'
+        value: 'internal-azure-subscription'
+        
     steps:
+      - pwsh: |
+          Write-Host "Pipeline connection name: $(pipelineConnectionVariable)"
+        displayName: 'Expand pipeline level variable'
+
+      # Works!
+      - task: AzureCLI@2
+        displayName: 'Access service connection through pipeline level variable'
+        enabled: true
+        name: usePipelineConnectionVariable
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: '$(pipelineConnectionVariable)'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            az account show
+          addSpnToEnvironment: true
+          useGlobalConfig: true
+          failOnStandardError: true
+
+      - pwsh: |
+          Write-Host "Job connection name: $(jobConnectionVariable)"
+        displayName: 'Expand job level variable'
+
       # # Broken
-      # # There was a resource authorization issue: "The pipeline is not valid. Job Repro: Step useConnectionA input connectedServiceNameARM references service connection $(subscriptionConnection) which could not be found. The service connection does not exist or has not been authorized for use. For authorization details, refer to https://aka.ms/yamlauthz."
       # - task: AzureCLI@2
-      #   displayName: 'Access service connection through stage level variable group'
+      #   displayName: 'Access service connection through job level variable'
       #   enabled: true
-      #   name: useConnectionA
+      #   name: useJobConnectionVariable
+      #   condition: succeededOrFailed()
       #   inputs:
-      #     azureSubscription: '$(subscriptionConnection)'
+      #     azureSubscription: '$(jobConnectionVariable)'
       #     scriptType: pscore
       #     scriptLocation: inlineScript
       #     inlineScript: |
@@ -44,37 +67,25 @@ stages:
       #     addSpnToEnvironment: true
       #     useGlobalConfig: true
       #     failOnStandardError: true
-
-      # Broken
-      # There was a resource authorization issue: "The pipeline is not valid. Job Repro: Step useConnectionB input connectedServiceNameARM references service connection $(subscriptionConnection2) which could not be found. The service connection does not exist or has not been authorized for use. For authorization details, refer to https://aka.ms/yamlauthz."
-      - task: AzureCLI@2
-        displayName: 'Access service connection through stage level variable'
-        enabled: true
-        name: useConnectionB
-        condition: succeededOrFailed()
-        inputs:
-          azureSubscription: '$(subscriptionConnection2)'
-          scriptType: pscore
-          scriptLocation: inlineScript
-          inlineScript: |
-            az account show
-          addSpnToEnvironment: true
-          useGlobalConfig: true
-          failOnStandardError: true
     
-      # Works!
-      - task: AzureCLI@2
-        displayName: 'Access service connection through pipeline level variable'
-        enabled: true
-        name: useConnectionC
-        condition: succeededOrFailed()
-        inputs:
-          azureSubscription: '$(subscriptionConnection3)'
-          scriptType: pscore
-          scriptLocation: inlineScript
-          inlineScript: |
-            az account show
-          addSpnToEnvironment: true
-          useGlobalConfig: true
-          failOnStandardError: true
-  
+      - pwsh: |
+          Write-Host "Stage connection name: $(stageConnectionVariable)"
+        displayName: 'Expand stage level variable'
+
+      # # Broken
+      # # There was a resource authorization issue: "The pipeline is not valid. Job Repro: Step useConnectionB input connectedServiceNameARM references service connection $(subscriptionConnection2) which could not be found. The service connection does not exist or has not been authorized for use. For authorization details, refer to https://aka.ms/yamlauthz."
+      # - task: AzureCLI@2
+      #   displayName: 'Access service connection through stage level variable'
+      #   enabled: true
+      #   name: useStageConnectionVariable
+      #   condition: succeededOrFailed()
+      #   inputs:
+      #     azureSubscription: '$(stageConnectionVariable)'
+      #     scriptType: pscore
+      #     scriptLocation: inlineScript
+      #     inlineScript: |
+      #       az account show
+      #     addSpnToEnvironment: true
+      #     useGlobalConfig: true
+      #     failOnStandardError: true
+    
