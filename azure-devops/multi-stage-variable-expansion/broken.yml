@@ -67,4 +67,3 @@ stages:
           addSpnToEnvironment: true
           useGlobalConfig: true
           failOnStandardError: true
-        condition: succeededOrFailed()
