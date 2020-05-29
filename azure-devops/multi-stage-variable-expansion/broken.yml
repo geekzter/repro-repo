@@ -52,20 +52,21 @@ stages:
           Write-Host "Job connection name: $(jobConnectionVariable)"
         displayName: 'Expand job level variable'
 
-      - task: AzureCLI@2
-        displayName: 'Access service connection through job level variable'
-        enabled: true
-        name: useJobConnectionVariable
-        condition: succeededOrFailed()
-        inputs:
-          azureSubscription: '$(jobConnectionVariable)'
-          scriptType: pscore
-          scriptLocation: inlineScript
-          inlineScript: |
-            az account show
-          addSpnToEnvironment: true
-          useGlobalConfig: true
-          failOnStandardError: true
+      # # Broken
+      # - task: AzureCLI@2
+      #   displayName: 'Access service connection through job level variable'
+      #   enabled: true
+      #   name: useJobConnectionVariable
+      #   condition: succeededOrFailed()
+      #   inputs:
+      #     azureSubscription: '$(jobConnectionVariable)'
+      #     scriptType: pscore
+      #     scriptLocation: inlineScript
+      #     inlineScript: |
+      #       az account show
+      #     addSpnToEnvironment: true
+      #     useGlobalConfig: true
+      #     failOnStandardError: true
     
       - pwsh: |
           Write-Host "Stage connection name: $(stageConnectionVariable)"
